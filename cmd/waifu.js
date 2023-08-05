@@ -1,13 +1,24 @@
+const axios = require("axios")
 module.exports = {
-  start: async function(ctx) {
-    let markup = Markup.inlineKeyboard([
-      Markup.button.callback("Next", "wnext"),
-      Markup.button.callback("Delete", "d")
-    ])
+  start: async function(bot, {chatId}) {
     let { data } = await axios("https://waifu.pics/api/sfw/waifu")
-    ctx.replyWithPhoto(data.url, {
-      "caption": `Source: ${data.url}`,
-      ...markup
+    bot.replyWithPhoto(chatId, data.url, {
+      caption: `Source: ${data.url}`,
+        reply_markup: {
+            inline_keyboard: [
+                [   
+                    {
+                        text: "Yes",
+                        callback_data: "btn_yes"
+                    },
+                    {
+                        text: "No",
+                        callback_data: "btn_no"
+                    },
+                   
+                ]
+            ]
+        }
     })
   },
   tags: "anime",
